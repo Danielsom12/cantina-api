@@ -1,0 +1,6 @@
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.095 s -- in br.com.cantina.service.PedidoServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.037 s -- in br.com.cantina.service.ProdutoServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in br.com.cantina.dominio.ProdutoTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.035 s -- in br.com.cantina.algoritmos.AlgoritmosProdutoTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS

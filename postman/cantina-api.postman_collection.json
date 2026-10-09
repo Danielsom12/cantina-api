@@ -1,0 +1,761 @@
+{
+  "info": {
+    "name": "Cantina API - AVC 2026/2",
+    "description": "Coleção do grupo (provisória até a coleção oficial ser disponibilizada). Execute na ordem, com o banco recém-criado.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "produtoId",
+      "value": ""
+    },
+    {
+      "key": "pedidoId",
+      "value": ""
+    },
+    {
+      "key": "produtoTempId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Listar clientes",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/clientes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clientes"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - lista\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Retorna array com clientes\", () => pm.expect(pm.response.json()).to.be.an(\"array\").that.is.not.empty);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Consultar cliente",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/clientes/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clientes",
+            "1"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - encontrado\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Cliente 1\", () => pm.expect(pm.response.json().id).to.eql(1));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Consultar cliente inexistente",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/clientes/999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "clientes",
+            "999999"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 404 - nao encontrado\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Cadastrar produto",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Pastel de queijo\",\n  \"preco\": 8.5,\n  \"estoque\": 3\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201 - criado\", () => pm.response.to.have.status(201));",
+              "const p = pm.response.json();",
+              "pm.collectionVariables.set(\"produtoId\", p.id);",
+              "pm.test(\"Dados gravados\", () => { pm.expect(p.preco).to.eql(8.5); pm.expect(p.estoque).to.eql(3); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Cadastrar produto invalido",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"\",\n  \"preco\": -1,\n  \"estoque\": -5\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400 - dados invalidos\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Listar produtos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - lista\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Consultar produto",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - encontrado\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Atualizar produto (nome e preco)",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Pastel de queijo grande\",\n  \"preco\": 9.0\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - atualizado\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Nome e preco alterados\", () => { const p = pm.response.json(); pm.expect(p.nome).to.eql(\"Pastel de queijo grande\"); pm.expect(p.preco).to.eql(9); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - Pedir produto com estoque",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": 1,\n  \"produtoId\": {{produtoId}}\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201 - pedido criado\", () => pm.response.to.have.status(201));",
+              "const ped = pm.response.json();",
+              "pm.collectionVariables.set(\"pedidoId\", ped.id);",
+              "pm.test(\"Preco registrado = preco atual (9.00)\", () => pm.expect(ped.precoRegistrado).to.eql(9));",
+              "pm.test(\"Situacao ATIVO\", () => pm.expect(ped.situacao).to.eql(\"ATIVO\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Estoque baixou uma unidade",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - ok\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Estoque 3 -> 2\", () => pm.expect(pm.response.json().estoque).to.eql(2));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - Alterar preco apos o pedido",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Pastel de queijo grande\",\n  \"preco\": 12.0\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - atualizado\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - Pedido mantem preco historico",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - lista\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Pedido continua com 9.00\", () => { const ped = pm.response.json().find(x => x.id == pm.collectionVariables.get(\"pedidoId\")); pm.expect(ped.precoRegistrado).to.eql(9); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - Informar cliente inexistente",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": 999999,\n  \"produtoId\": {{produtoId}}\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 404 - cliente nao encontrado\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 - Estoque nao mudou apos rejeicao",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - ok\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Estoque continua 2\", () => pm.expect(pm.response.json().estoque).to.eql(2));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 - Pedir produto sem estoque (Bolo de cenoura)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": 1,\n  \"produtoId\": 5\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409 - sem estoque\", () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 - Cancelar pedido",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos/{{pedidoId}}/cancelamento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos",
+            "{{pedidoId}}",
+            "cancelamento"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - cancelado\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Situacao CANCELADO\", () => pm.expect(pm.response.json().situacao).to.eql(\"CANCELADO\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 - Repetir cancelamento",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos/{{pedidoId}}/cancelamento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos",
+            "{{pedidoId}}",
+            "cancelamento"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409 - ja cancelado\", () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 - Estoque reposto apenas uma vez",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200 - ok\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Estoque voltou para 3 (e nao 4)\", () => pm.expect(pm.response.json().estoque).to.eql(3));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 - [Cenario proprio] Excluir produto com historico",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409 - historico preservado\", () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 - [Cenario proprio] Alterar estoque de produto com historico",
+      "request": {
+        "method": "PUT",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoId}}"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Pastel de queijo grande\",\n  \"preco\": 12.0,\n  \"estoque\": 100\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409 - estoque so muda por pedido/cancelamento\", () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21 - Excluir produto sem historico",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Produto temporario\",\n  \"preco\": 1.0,\n  \"estoque\": 1\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201 - criado\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"produtoTempId\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22 - Excluir produto sem historico (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoTempId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoTempId}}"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 204 - excluido\", () => pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23 - Consultar produto excluido",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{produtoTempId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "produtos",
+            "{{produtoTempId}}"
+          ]
+        },
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 404 - nao existe mais\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

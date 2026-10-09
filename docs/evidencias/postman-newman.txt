@@ -1,0 +1,126 @@
+newman
+
+Cantina API - AVC 2026/2
+
+Root 01 - Listar clientes
+  GET http://localhost:8080/clientes [200 OK, 347B, 46ms]
+  Pass  Status 200 - lista
+  Pass  Retorna array com clientes
+
+Root 02 - Consultar cliente
+  GET http://localhost:8080/clientes/1 [200 OK, 221B, 6ms]
+  Pass  Status 200 - encontrado
+  Pass  Cliente 1
+
+Root 03 - Consultar cliente inexistente
+  GET http://localhost:8080/clientes/999999 [404 Not Found, 320B, 5ms]
+  Pass  Status 404 - nao encontrado
+
+Root 04 - Cadastrar produto
+  POST http://localhost:8080/produtos [201 Created, 250B, 17ms]
+  Pass  Status 201 - criado
+  Pass  Dados gravados
+
+Root 05 - Cadastrar produto invalido
+  POST http://localhost:8080/produtos [400 Bad Request, 394B, 5ms]
+  Pass  Status 400 - dados invalidos
+
+Root 06 - Listar produtos
+  GET http://localhost:8080/produtos [200 OK, 512B, 5ms]
+  Pass  Status 200 - lista
+
+Root 07 - Consultar produto
+  GET http://localhost:8080/produtos/6 [200 OK, 223B, 5ms]
+  Pass  Status 200 - encontrado
+
+Root 08 - Atualizar produto (nome e preco)
+  PUT http://localhost:8080/produtos/6 [200 OK, 229B, 7ms]
+  Pass  Status 200 - atualizado
+  Pass  Nome e preco alterados
+
+Root 09 - Pedir produto com estoque
+  POST http://localhost:8080/pedidos [201 Created, 377B, 9ms]
+  Pass  Status 201 - pedido criado
+  Pass  Preco registrado = preco atual (9.00)
+  Pass  Situacao ATIVO
+
+Root 10 - Estoque baixou uma unidade
+  GET http://localhost:8080/produtos/6 [200 OK, 230B, 5ms]
+  Pass  Status 200 - ok
+  Pass  Estoque 3 -> 2
+
+Root 11 - Alterar preco apos o pedido
+  PUT http://localhost:8080/produtos/6 [200 OK, 230B, 8ms]
+  Pass  Status 200 - atualizado
+
+Root 12 - Pedido mantem preco historico
+  GET http://localhost:8080/pedidos [200 OK, 352B, 6ms]
+  Pass  Status 200 - lista
+  Pass  Pedido continua com 9.00
+
+Root 13 - Informar cliente inexistente
+  POST http://localhost:8080/pedidos [404 Not Found, 312B, 7ms]
+  Pass  Status 404 - cliente nao encontrado
+
+Root 14 - Estoque nao mudou apos rejeicao
+  GET http://localhost:8080/produtos/6 [200 OK, 231B, 4ms]
+  Pass  Status 200 - ok
+  Pass  Estoque continua 2
+
+Root 15 - Pedir produto sem estoque (Bolo de cenoura)
+  POST http://localhost:8080/pedidos [409 Conflict, 313B, 7ms]
+  Pass  Status 409 - sem estoque
+
+Root 16 - Cancelar pedido
+  PATCH http://localhost:8080/pedidos/1/cancelamento [200 OK, 354B, 8ms]
+  Pass  Status 200 - cancelado
+  Pass  Situacao CANCELADO
+
+Root 17 - Repetir cancelamento
+  PATCH http://localhost:8080/pedidos/1/cancelamento [409 Conflict, 321B, 6ms]
+  Pass  Status 409 - ja cancelado
+
+Root 18 - Estoque reposto apenas uma vez
+  GET http://localhost:8080/produtos/6 [200 OK, 231B, 6ms]
+  Pass  Status 200 - ok
+  Pass  Estoque voltou para 3 (e nao 4)
+
+Root 19 - [Cenario proprio] Excluir produto com historico
+  DELETE http://localhost:8080/produtos/6 [409 Conflict, 345B, 6ms]
+  Pass  Status 409 - historico preservado
+
+Root 20 - [Cenario proprio] Alterar estoque de produto com historico
+  PUT http://localhost:8080/produtos/6 [409 Conflict, 354B, 6ms]
+  Pass  Status 409 - estoque so muda por pedido/cancelamento
+
+Root 21 - Excluir produto sem historico
+  POST http://localhost:8080/produtos [201 Created, 252B, 6ms]
+  Pass  Status 201 - criado
+
+Root 22 - Excluir produto sem historico (DELETE)
+  DELETE http://localhost:8080/produtos/7 [204 No Content, 112B, 6ms]
+  Pass  Status 204 - excluido
+
+Root 23 - Consultar produto excluido
+  GET http://localhost:8080/produtos/7 [404 Not Found, 310B, 5ms]
+  Pass  Status 404 - nao existe mais
+
+---------------------------------------------------------------
+|                         |        executed |          failed |
+--------------------------+-----------------+------------------
+|              iterations |               1 |               0 |
+--------------------------+-----------------+------------------
+|                requests |              23 |               0 |
+--------------------------+-----------------+------------------
+|            test-scripts |              23 |               0 |
+--------------------------+-----------------+------------------
+|      prerequest-scripts |               0 |               0 |
+--------------------------+-----------------+------------------
+|              assertions |              34 |               0 |
+---------------------------------------------------------------
+| total run duration: 567ms                                   |
+---------------------------------------------------------------
+| total data received: 2.99kB (approx)                        |
+---------------------------------------------------------------
+| average response time: 8ms [min: 4ms, max: 46ms, s.d.: 8ms] |
+---------------------------------------------------------------
