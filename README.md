@@ -55,7 +55,7 @@ Uma cantina precisa **registrar pedidos** e **controlar o estoque** dos produtos
 | Nº | RA | Nome completo | Contribuição principal |
 |:-:|---|---|---|
 | 1 | `______` | Daniel Sammartano | _a preencher_ |
-| 2 | `______` | _a preencher_ | _a preencher_ |
+| 2 | `5320267` | Manoela Olim Boross| _a preencher_ |
 | 3 | `______` | _a preencher_ | _a preencher_ |
 | 4 | `______` | _a preencher_ | _a preencher_ |
 
