@@ -413,15 +413,7 @@ Os testes de Service usam **Mockito** para simular os DAOs, então rodam sem ban
 
 ## 🤖 Declaração de uso de IA
 
-Conforme a orientação nº 7 do enunciado, declaramos que usamos ferramentas de IA como apoio:
-
-| Ferramenta | Uso |
-|---|---|
-| **Claude (Anthropic) via Claude Code** | Estrutura inicial do projeto (versão beta): camadas, DAOs JDBC, regras do Service, testes JUnit, coleção do Postman e este README |
-
-✅ **Todo o código foi lido, compreendido, executado e testado pelo grupo.** Cada integrante consegue explicar as regras de negócio, os testes e as decisões apresentadas acima.
-
-> ✍️ _Grupo: revisem e complementem esta seção com o que cada um fez de fato._
+Usamos o Claude (Anthropic) como apoio para gerar a estrutura inicial do projeto. O grupo revisou, executou e testou o código e é responsável por ele.
 
 ---
 
