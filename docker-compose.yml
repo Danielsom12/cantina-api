@@ -1,12 +1,12 @@
-# Opcional: sobe um PostgreSQL local com o esquema provisorio (db/*.sql).
+# Opcional: sobe um PostgreSQL local com o esquema provisorio (db/*.sql). Le DB_USER/DB_PASSWORD do .env.
 # Docker NAO e requisito da AVC; e so uma conveniencia para desenvolver sem instalar o Postgres.
 services:
   postgres:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: cantina
-      POSTGRES_USER: ${DB_USER:-cantina}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-cantina}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
